@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris</title>
+</head>
+<body>
+    <canvas id="gameCanvas" width="640" height="480"></canvas>
+
+
+    <script>
+
+        const FPS = 30;
+        var sizeBox = [10,60];
+        var setSpeed = 5;
+        var yVelocityBox = 0;
+        var moveBox1 = 30; 
+
+        var canvas, context;
+
+        canvas = document.getElementById("gameCanvas");
+        context = canvas.getContext("2d");
+
+        class box{
+            draw(xPositionBox, yPositionBox){
+                context.fillStyle ="yellow";
+                context.fillRect(xPositionBox ,yPositionBox , sizeBox[0], sizeBox[1]);
+            }
+
+        }
+
+        setInterval(update,1000/FPS);
+
+        const box1 = new box();
+        const box2 = new box();
+
+
+        function update(){
+
+            
+            document.addEventListener('keydown',(e)=>{
+                if(e.key == 'w'){
+                    yVelocityBox = -setSpeed;
+                }
+
+                if(e.key == 's'){
+                    yVelocityBox = setSpeed;
+                }
+            })
+
+            document.addEventListener('keyup',(e)=>{
+                if(e.key == 'w' || e.key == 's'){
+                    yVelocityBox = 0;
+                }
+            })
+            
+
+            moveBox1 = moveBox1 + yVelocityBox;
+            
+       
+            context.fillStyle ="black";
+            context.fillRect(0,0, canvas.width, canvas.height);
+            box1.draw(30, moveBox1);
+            box2.draw(canvas.width-40, 30);
+
+
+        }
+
+
+    </script>
+</body>
+</html>
