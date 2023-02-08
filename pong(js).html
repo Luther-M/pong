@@ -11,6 +11,11 @@
 
 
     <script>
+        
+        var canvas, context;
+
+        canvas = document.getElementById("gameCanvas");
+        context = canvas.getContext("2d");
 
         const FPS = 30;
 
@@ -21,19 +26,23 @@
         var yVelocityBox2 = 0;
         var moveBox1 = 30; 
         var moveBox2 = 30;
-        var xMoveBall = 1;
-        var yMoveBall = 0
+        var distanceFromSide = 30;
 
-        // ball variables
-        var ballRadius = 10
-        var setBallSpeed = 5;
-        var xVelocityBall = 0;
-        var yVelocityBall = 0;
+         // ball variables
+        var xMoveBall = canvas.width / 2;
+        var yMoveBall = canvas.height / 2;
+        var ballRadius = 10;
+        var xVelocityBall = 5;
+        var yVelocityBall = Math.floor(Math.random()* 5);
 
-        var canvas, context;
+        var moveSide = Math.floor(Math.random()*2);
 
-        canvas = document.getElementById("gameCanvas");
-        context = canvas.getContext("2d");
+        if(moveSide == 0){
+            xVelocityBall = -xVelocityBall;
+        }  
+        else{
+            xVelocityBall = xVelocityBall;
+        }
 
         class box{
             draw(xPositionBox, yPositionBox){
@@ -64,19 +73,19 @@
             // key pressed by the user
             document.addEventListener('keydown',(e)=>{
                 if(e.key == 'w'){
-                    yVelocityBox1 = -setSpeed;
+                    yVelocityBox1 = -setBoxSpeed;
                 }
 
                 if(e.key == 's'){
-                    yVelocityBox1 = setSpeed;
+                    yVelocityBox1 = setBoxSpeed;
                 }
 
                 if(e.key == 'i'){
-                    yVelocityBox2 = -setSpeed;
+                    yVelocityBox2 = -setBoxSpeed;
                 }
 
                 if(e.key == 'k'){
-                    yVelocityBox2 = setSpeed;
+                    yVelocityBox2 = setBoxSpeed;
                 }
             })
 
@@ -106,15 +115,35 @@
             else{
                 moveBox2 = moveBox2 + yVelocityBox2;
             }
+            
+            if (yMoveBall < ballRadius || yMoveBall > canvas.height - ballRadius ){
+                yVelocityBall = -yVelocityBall;
+            }
+
+            if (xMoveBall < ballRadius || xMoveBall > canvas.width - ballRadius){
+                xVelocityBall = -xVelocityBall;
+            }
+
+            if(xMoveBall - ballRadius < distanceFromSide + sizeBox[0] && yMoveBall > moveBox1 && yMoveBall < moveBox1 + sizeBox[1]){
+                xVelocityBall = -xVelocityBall;
+            }
    
-            // background pf the game
+            if(xMoveBall + ballRadius > canvas.width - distanceFromSide - sizeBox[0]  && yMoveBall > moveBox2 && yMoveBall < moveBox2 + sizeBox[1]){
+                xVelocityBall = -xVelocityBall;
+            }
+
+            xMoveBall = xMoveBall + xVelocityBall;
+            yMoveBall = yMoveBall + yVelocityBall;
+
+
+            // background of the game
             context.fillStyle ="black";
             context.fillRect(0,0, canvas.width, canvas.height);
             
             // draw the box1 and box2
-            box1.draw(30, moveBox1);
-            box2.draw(canvas.width-40, moveBox2);
-            ball1.draw(canvas.width/2, canvas.height/2);
+            box1.draw(distanceFromSide, moveBox1);
+            box2.draw(canvas.width-(sizeBox[0] + distanceFromSide), moveBox2);
+            ball1.draw(xMoveBall, yMoveBall);
 
 
         }
