@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tetris</title>
+    <title>Pong</title>
 </head>
 <body>
     <canvas id="gameCanvas" width="640" height="480"></canvas>
@@ -13,10 +13,22 @@
     <script>
 
         const FPS = 30;
+
+        // box variables
         var sizeBox = [10,60];
-        var setSpeed = 5;
-        var yVelocityBox = 0;
+        var setBoxSpeed = 5;
+        var yVelocityBox1 = 0;
+        var yVelocityBox2 = 0;
         var moveBox1 = 30; 
+        var moveBox2 = 30;
+        var xMoveBall = 1;
+        var yMoveBall = 0
+
+        // ball variables
+        var ballRadius = 10
+        var setBallSpeed = 5;
+        var xVelocityBall = 0;
+        var yVelocityBall = 0;
 
         var canvas, context;
 
@@ -31,39 +43,78 @@
 
         }
 
+        class ball{
+            draw(xPositionBall,yPositionBall){
+                context.beginPath();
+                context.arc(xPositionBall, yPositionBall, ballRadius, 0, 2 * Math.PI);
+                context.fillStyle="yellow";
+                context.fill();
+            }
+        }
+
         setInterval(update,1000/FPS);
 
         const box1 = new box();
         const box2 = new box();
+        const ball1 = new ball();
 
 
         function update(){
 
-            
+            // key pressed by the user
             document.addEventListener('keydown',(e)=>{
                 if(e.key == 'w'){
-                    yVelocityBox = -setSpeed;
+                    yVelocityBox1 = -setSpeed;
                 }
 
                 if(e.key == 's'){
-                    yVelocityBox = setSpeed;
+                    yVelocityBox1 = setSpeed;
+                }
+
+                if(e.key == 'i'){
+                    yVelocityBox2 = -setSpeed;
+                }
+
+                if(e.key == 'k'){
+                    yVelocityBox2 = setSpeed;
                 }
             })
 
+            // key released by the user
             document.addEventListener('keyup',(e)=>{
                 if(e.key == 'w' || e.key == 's'){
-                    yVelocityBox = 0;
+                    yVelocityBox1 = 0;
+                }
+
+                if(e.key == 'i' || e.key == 'k'){
+                    yVelocityBox2 = 0;
                 }
             })
             
+            // to prevent the box moving out from the game screen for box1
+            if((moveBox1 < 0 && yVelocityBox1 < 0) || (moveBox1 + sizeBox[1] > canvas.height && yVelocityBox1 > 0)){
+                moveBox1 = moveBox1;
+            }
+            else{
+                moveBox1 = moveBox1 + yVelocityBox1;
+            }
 
-            moveBox1 = moveBox1 + yVelocityBox;
-            
-       
+            // to prevent the box moving out from the game screen for box2
+            if((moveBox2 < 0 && yVelocityBox2 < 0) || (moveBox2 + sizeBox[1] > canvas.height && yVelocityBox2 > 0)){
+                moveBox2 = moveBox2;
+            }
+            else{
+                moveBox2 = moveBox2 + yVelocityBox2;
+            }
+   
+            // background pf the game
             context.fillStyle ="black";
             context.fillRect(0,0, canvas.width, canvas.height);
+            
+            // draw the box1 and box2
             box1.draw(30, moveBox1);
-            box2.draw(canvas.width-40, 30);
+            box2.draw(canvas.width-40, moveBox2);
+            ball1.draw(canvas.width/2, canvas.height/2);
 
 
         }
