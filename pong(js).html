@@ -35,13 +35,15 @@
         var xVelocityBall = 5;
         var yVelocityBall = Math.floor(Math.random()* 5);
 
-        var moveSide = Math.floor(Math.random()*2);
+        var xmoveSide = Math.floor(Math.random()*2);
+        var ymoveSide = Math.floor(Math.random()*2);
 
-        if(moveSide == 0){
+        if(xmoveSide == 0){
             xVelocityBall = -xVelocityBall;
         }  
-        else{
-            xVelocityBall = xVelocityBall;
+
+        if(ymoveSide == 0){
+            yVelocityBall = -yVelocityBall;
         }
 
         class box{
@@ -79,6 +81,7 @@
                 if(e.key == 's'){
                     yVelocityBox1 = setBoxSpeed;
                 }
+
 
                 if(e.key == 'i'){
                     yVelocityBox2 = -setBoxSpeed;
