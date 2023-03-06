@@ -11,7 +11,8 @@
 
 
     <script>
-        
+    
+
         var canvas, context;
 
         canvas = document.getElementById("gameCanvas");
@@ -29,22 +30,17 @@
         var distanceFromSide = 30;
 
          // ball variables
+
+         directionDecider = () =>{
+            let rng = Math.floor(Math.random()*2);
+            return (rng == 0 ? -1: 1);
+        }
+
         var xMoveBall = canvas.width / 2;
         var yMoveBall = canvas.height / 2;
         var ballRadius = 10;
-        var xVelocityBall = 5;
-        var yVelocityBall = Math.floor(Math.random()* 5);
-
-        var xmoveSide = Math.floor(Math.random()*2);
-        var ymoveSide = Math.floor(Math.random()*2);
-
-        if(xmoveSide == 0){
-            xVelocityBall = -xVelocityBall;
-        }  
-
-        if(ymoveSide == 0){
-            yVelocityBall = -yVelocityBall;
-        }
+        var xVelocityBall = directionDecider()*5;
+        var yVelocityBall = directionDecider()*(Math.floor(Math.random()* 5));
 
         class box{
             draw(xPositionBox, yPositionBox){
@@ -68,7 +64,6 @@
         const box1 = new box();
         const box2 = new box();
         const ball1 = new ball();
-
 
         function update(){
 
